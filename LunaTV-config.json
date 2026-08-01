@@ -208,6 +208,16 @@
       "api": "https://m3u8.apiyhzy.com/api.php/provide/vod",
       "detail": "https://yhzy.cc"
     },
+    "xgzyapi.com": {
+      "name": "🎬西瓜资源",
+      "api": "https://caiji.xgzyapi.com/api.php/provide/vod",
+      "detail": "https://caiji.xgzyapi.com"
+    },
+    "98zy.vip": {
+      "name": "🎬98资源",
+      "api": "https://98zy.vip/api.php/provide/vod",
+      "detail": "https://98zy.vip"
+    },
     "91md.me": {
       "name": "🔞麻豆视频",
       "api": "https://91md.me/api.php/provide/vod",

@@ -135,6 +135,16 @@
       "name": "🎬艾旦影视",
       "api": "https://pz.berserk.qzz.io/?url=https://lovedan.net/api.php/provide/vod",
       "detail": "https://lovedan.net"
+    },
+    "xgzyapi.com": {
+      "name": "🎬西瓜资源",
+      "api": "https://caiji.xgzyapi.com/api.php/provide/vod",
+      "detail": "https://caiji.xgzyapi.com"
+    },
+    "98zy.vip": {
+      "name": "🎬98资源",
+      "api": "https://98zy.vip/api.php/provide/vod",
+      "detail": "https://98zy.vip"
     }
   }
 }
