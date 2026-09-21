@@ -12,13 +12,29 @@
 
 ### 1. 配置来源 API 代理
 
-使用 `?url=` 参数转发配置中已登记的 API 请求。默认仅允许 `GET`、`HEAD` 与 `OPTIONS`，并阻挡本机及私有网络地址。
+使用 `?url=` 参数转发配置中已登记的 API 请求。默认仅允许 `GET`、`HEAD` 与 `OPTIONS`，并阻挡本机及私有网络地址。`format=1/3` 会给每个源生成 `/p/{sourceId}?url=` 路径，避免缓存互相污染。
 
 **示例：**
 
 ```
 https://<你的域名>/?url=https://ikunzyapi.com/api.php/provide/vod/
+https://<你的域名>/p/ikun?url=https://ikunzyapi.com/api.php/provide/vod/
 ```
+
+### 1b. 播放流加速（m3u8）
+
+直连失败或源站限速时，把播放地址交给 Worker：
+
+```
+https://<你的域名>/m3u8?url=<编码后的m3u8地址>
+```
+
+- 清单里的 `.ts` / 密钥 / MAP 会改写到 `/seg?url=`
+- 嵌套 playlist 会改写到 `/m3u8?url=`
+- `/m3u8` 与 `/seg` 只开放公网 HTTP(S)，仍阻挡本机与私有网段
+- 普通 `/?url=` **不会**因此变成开放代理，CMS 接口仍走白名单
+- 绑定 KV 后，改写结果缓存 5 分钟；`?nocache=1` 可跳过
+- 响应头带 `Alt-Svc: h3=":443"`，客户端可升级 HTTP/3
 
 ### 2. 多配置源支持
 
@@ -105,6 +121,12 @@ https://api.example.workers.dev/?format=3&source=full
 https://api.example.workers.dev/?format=1&source=full&prefix=https://my-proxy.com/?url=
 ```
 
+### 示例 7：播放流 m3u8 加速
+
+```
+https://api.example.workers.dev/m3u8?url=https://cdn.example.com/index.m3u8
+```
+
 ---
 
 ## 🛠️ 参数说明
@@ -188,8 +210,9 @@ https://<你的域名>/?format=3&source=full
 - **代理替换逻辑**：如果 JSON 中 `api` 字段已包含 `?url=` 前缀，会先去掉旧前缀，再加上新前缀。
 - **Base58 输出**：适合直接作为订阅链接在支持该格式的客户端中使用。
 - **配置源更新**：配置源来自 GitHub；启用 KV 时 Worker 快取为 1800 秒（30 分钟），配置内的 `cache_time: 7200` 是客户端建议刷新周期。
-- **超时设置**：默认请求超时时间为 9 秒，超时后会返回错误信息。
-- **代理限制**：默认只允许配置内已登记的来源、标准 HTTP(S) 端口及安全请求头；不建议将 `PROXY_ALLOWED_HOSTS` 设置为 `*`。
+- **代理限制**：`/?url=` 默认只允许配置内已登记的来源。播放流请用 `/m3u8`，不要把 `PROXY_ALLOWED_HOSTS` 设为 `*`。
+- **KV 缓存**：`CONFIG_KV` 或 `KV` 绑定后，JSON 配置缓存 30 分钟，改写后的 m3u8 缓存 5 分钟。
+- **超时**：API 9 秒，m3u8 15 秒，分片 30 秒。
 - **CORS 支持**：已启用 GET/HEAD 读取所需的 CORS 支持，可直接在前端应用中调用。
 
 ---

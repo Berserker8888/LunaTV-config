@@ -55,12 +55,13 @@ https://raw.githubusercontent.com/Berserker8888/LunaTV-config/refs/heads/main/Lu
 
 ### 1. 配置来源 API 代理
 
-使用 `?url=` 参数转发配置中已登记的 API 请求。默认仅允许 `GET`、`HEAD` 与 `OPTIONS`，并阻挡本机及私有网络地址。
+使用 `?url=` 参数转发配置中已登记的 API 请求。默认仅允许 `GET`、`HEAD` 与 `OPTIONS`，并阻挡本机及私有网络地址。播放流请走 `/m3u8?url=`，清单里的分片会改写到 `/seg`。
 
 **示例：**
 
 ```
 https://<你的域名>/?url=https://ikunzyapi.com/api.php/provide/vod/
+https://<你的域名>/m3u8?url=https://cdn.example.com/index.m3u8
 ```
 
 ### 2. 多配置源支持
