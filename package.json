@@ -7,10 +7,11 @@
     "build:configs": "node build-configs.js",
     "encode": "node encode.js",
     "build": "npm run build:configs && npm run encode",
+    "sync:sources": "node sync-upstream-config.js",
     "check:api": "node check_api.js",
     "update:readme": "node update_readme.js",
     "verify": "node verify.js",
-    "test": "node --test worker.test.js check-api.test.js && npm run verify"
+    "test": "node --test worker.test.js check-api.test.js sync-upstream-config.test.js && npm run verify"
   },
   "dependencies": {
     "axios": "^1.18.1",

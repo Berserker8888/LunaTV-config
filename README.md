@@ -68,9 +68,9 @@ https://<你的域名>/m3u8?url=https://cdn.example.com/index.m3u8
 
 使用 `?source=` 参数选择不同的资源配置：
 
-- **`source=jin18`** - 精简版（27个资源，仅普通内容）
-- **`source=jingjian`** - 精简+成人版（48个资源）
-- **`source=full`** - 完整版（72个资源，**默认**）
+- **`source=jin18`** - 精简版（28个资源，仅普通内容）
+- **`source=jingjian`** - 精简+成人版（47个资源）
+- **`source=full`** - 完整版（69个资源，**默认**）
 
 ### 3. 统一的 format 参数
 
@@ -188,9 +188,9 @@ https://api.example.workers.dev/?format=1&source=full&prefix=https://my-proxy.co
 
 | 配置源 | 资源数量 | 包含成人内容 | 适用场景 |
 | --- | --- | --- | --- |
-| **jin18** | 27个 | ❌ 否 | 家庭使用、轻量级应用 |
-| **jingjian** | 48个 | ✅ 是 | 个人使用、中等需求 |
-| **full** | 72个 | ✅ 是 | 完整功能、最大兼容性 |
+| **jin18** | 28个 | ❌ 否 | 家庭使用、轻量级应用 |
+| **jingjian** | 47个 | ✅ 是 | 个人使用、中等需求 |
+| **full** | 69个 | ✅ 是 | 完整功能、最大兼容性 |
 
 
 🧩 **前缀替换逻辑**  
@@ -324,10 +324,12 @@ npm run build
 npm test
 ```
 
+- `npm run sync:sources`：从上游 `hafrey1/LunaTV-config` 拉取 `LunaTV-config.json`，并把其中的 `pz.v88.qzz.io` 换成 `pz.berserk.qzz.io`。
 - `npm run build`：由完整配置生成 `jingjian.json`、`jin18.json` 与三份 Base58 订阅。
 - `npm test`：验证 JSON 结构、衍生文件一致性、Base58 内容及所有 JavaScript 语法。
+- 每日排程会先同步上游片源，再检查 API。Worker、编辑器、仓库链接与其他脚本不会被上游覆盖。
 - `npm run check:api -- "你好"`：执行线上来源检查并更新 `report.md`。
-- 日常检查只统计 48 个启用来源；设置 `CHECK_QUARANTINED=true` 可同时复查 24 个隔离来源，排程每周自动复查一次。
+- 日常检查只统计 47 个启用来源；设置 `CHECK_QUARANTINED=true` 可同时复查 22 个隔离来源，排程每周自动复查一次。
 - `npm run update:readme`：把最新健康报告写入 README。
 
 ---
@@ -350,7 +352,7 @@ npm test
 
 ### ⚙️ 精简版源更新
 - 去除污染源与无搜索结果源（如 🎬虎牙、🔞丝袜、🔞色猫）。  
-- 当前 `jingjian` 为 **48 个来源**，无成人内容的 `jin18` 为 **27 个来源**。
+- 当前 `jingjian` 为 **47 个来源**，无成人内容的 `jin18` 为 **28 个来源**。
 <details>
 <summary>示例</summary>
 <img width="1025" height="486" alt="61" src="https://github.com/user-attachments/assets/81c80108-7c03-4583-87ab-b7b57cdfd3bd" />

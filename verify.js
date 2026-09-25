@@ -107,6 +107,7 @@ for (const fileName of [
   'worker.test.js',
   'check-api.test.js',
   'check_api.js',
+  'sync-upstream-config.js',
   'update_readme.js',
   'config.js',
   'web-editor/script.js',

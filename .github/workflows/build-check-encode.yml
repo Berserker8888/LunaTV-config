@@ -10,6 +10,8 @@ on:
       - 'build-configs.js'
       - 'encode.js'
       - 'check_api.js'
+      - 'sync-upstream-config.js'
+      - 'sync-upstream-config.test.js'
       - 'update_readme.js'
       - 'verify.js'
       - 'worker.test.js'
@@ -53,15 +55,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 3️⃣ 生成精简配置与 Base58
+      # 3️⃣ 只同步上游片源清单，并改回自己的代理域名
+      - name: Sync upstream source catalog
+        run: npm run sync:sources
+
+      # 4️⃣ 生成精简配置与 Base58
       - name: Build subscriptions
         run: npm run build
 
-      # 4️⃣ 验证 JSON、衍生档与脚本
+      # 5️⃣ 验证 JSON、衍生档与脚本
       - name: Verify generated files
         run: npm test
 
-      # 5️⃣ 运行 API 检查脚本
+      # 6️⃣ 运行 API 检查脚本
       - name: Run API check
         run: |
           API_NAME="${{ github.event.inputs.api_name || '你好' }}"
@@ -72,11 +78,11 @@ jobs:
           echo "检查 API: $API_NAME（复查隔离来源: $CHECK_QUARANTINED）"
           CHECK_QUARANTINED="$CHECK_QUARANTINED" npm run check:api -- "$API_NAME"
 
-      # 6️⃣ 更新 README 或报告
+      # 7️⃣ 更新 README 或报告
       - name: Update report
         run: npm run update:readme
 
-      # 7️⃣ 提交并推送所有生成文件
+      # 8️⃣ 提交并推送片源与报告
       - name: Commit and push all generated files
         run: |
           # 配置 Git
@@ -91,10 +97,10 @@ jobs:
           fi
 
           # 添加所有生成文件
-          git add jingjian.json jin18.json LunaTV-config.txt jingjian.txt jin18.txt report.md README.md
+          git add LunaTV-config.json jingjian.json jin18.json LunaTV-config.txt jingjian.txt jin18.txt report.md README.md
 
           # 提交更新，如果没有变化则输出提示
-          git commit -m "自动更新 JSON、Base58 和 API 报告 ($(date -d '+8 hour' +'%Y-%m-%d %H:%M:%S CST'))" || echo "⚠️ 没有文件变化可提交"
+          git commit -m "自动同步上游片源并更新 API 报告 ($(date -d '+8 hour' +'%Y-%m-%d %H:%M:%S CST'))" || echo "⚠️ 没有文件变化可提交"
 
           # 推送到远程 main
           git push origin HEAD:main
